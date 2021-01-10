@@ -27,19 +27,27 @@ output.txt
 
 void FileReading(const string& filePath){
     ifstream input (filePath);
-    vector<string> vec;
+
+    vector<int> vec;
+    /*vector<string> vec;*/
     if(input){
-        string line;
+        int n;
+        input >> n;
+        for (int i = 0; i < n; ++i) {
+            vec.push_back(n);
+        }
+        /*string line;
         while(getline(input, line)){
             vec.push_back(line);
-        }
-        for(auto n : vec){
-            cout << n << endl;
+        }*/
+        for(auto m : vec){
+            cout << m << endl;
         }
 
     }else{
         cout << "error" << endl;
     }
+
     input.close();
 }
 
