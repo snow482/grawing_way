@@ -25,23 +25,21 @@ output.txt
 3*/
 
 
-void FileReading(const string& filePath){
+void FileReading(const string& filePath, vector<int>& vec){
     ifstream input (filePath);
 
-    vector<int> vec;
+
     /*vector<string> vec;*/
     if(input){
         int n;
         input >> n;
-        for (int i = 0; i < n; ++i) {
-            vec.push_back(n);
-        }
+        vec.push_back(n);
         /*string line;
         while(getline(input, line)){
             vec.push_back(line);
         }*/
-        for(auto m : vec){
-            cout << m << endl;
+        for(auto it : vec){
+            cout << it << " ";
         }
 
     }else{
@@ -69,11 +67,26 @@ void FileWriting(const string& filePath){
     output.close();
 }
 
+int MaxSort(const vector<int>& vec){
+    auto it_max = vec.begin();
+    for(auto it = vec.begin(); it != vec.end(); ++it){
+        if(*it_max < *it){
+            it_max = it;
+        }
+    }
+    return *it_max;
+}
+
 int main(){
 
     string filePath = "D:/C++/git/grawing_way/input.txt";
+    vector<int> vec;
     FileWriting(filePath);
-    FileReading(filePath);
+    FileReading(filePath, vec);
+    
+    int maxValue = 0;
+    MaxSort(vec);
+    maxValue += MaxSort(vec);
 
 
 
