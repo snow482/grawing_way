@@ -3,16 +3,11 @@
 #include <fstream>
 #include <string>
 
-using std::ws;
-using std::ifstream;
-using std::ofstream;
-using std::getline;
-using std::string;
 using std::vector;
 using std::cin;
 using std::cout;
 using std::endl;
-
+using std::string;
 
 
 /*У тебя есть тестовый файл input.txt в нём записано, n - количество чисел
@@ -26,107 +21,33 @@ output.txt
 3*/
 
 
-void FileReading(const string& filePath, vector<int>& vec){
-    ifstream input (filePath);
-    while(!input.eof()) {
-        int n;
-        input >> n >> ws;
-        vec.push_back(n);
+vector<int> ReadVector(const string& filePath){
+    std::ifstream input {filePath};
+    size_t n;
+    input >> n;
+    vector<int> vec;
+    vec.resize(n);
+
+    for(int i=0;i<n;++i){
+        input >> vec[i];
     }
-    input.close();
+    cout<<vec.size();
+    return vec;
 }
 
-void FileWriting(const string& filePath){
-    ofstream output(filePath);
-    if(output){
-        cout << "Please, write a numbers below:" << endl;
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; ++i) {
-            int nums;
-            cin >> nums;
-            output << nums << " ";
-        }
-    }else{
-        cout << "error" << endl;
+int findMax(const vector<int>& vec){
+    auto max = vec[0];
+    for(const auto& el : vec){
+        if(el > max)
+            max = el;
     }
-    output.close();
-}
-
-void VectorPrinting(const vector<int>& vec){
-    for(auto it : vec){
-        cout << it << endl;
-    }
-}
-
-int MaxSort(const vector<int>& vec){
-    auto it_max = vec.begin();
-    for(auto it = vec.begin(); it != vec.end(); ++it){
-        if(*it_max < *it){
-            it_max = it;
-        }
-    }
-    return *it_max;
+    return max;
 }
 
 int main(){
-
-    string filePath = "input.txt";
-    vector<int> vec;
-    FileWriting(filePath);
-    FileReading(filePath, vec);
-    VectorPrinting(vec);
-
-    int m = 0;
-    MaxSort(vec);
-    m = MaxSort(vec);
-    cout << "max value: " << m << endl;
-
-
-
-
-    //-------------------шляпа---------------------------
-    /*ofstream output;
-    output.open(filePath);
-
-    if(output.is_open()){
-        cout << "Please, write a numbers below " << endl;
-        int n;
-        cin >> n;
-
-        for (int i = 0; i < n; ++i) {
-            int nums;
-            cin >> nums;
-
-            output << nums << " ";
-        }
-    }else {
-        cout << "error" << endl;
-    }
-    output.close(); */
-
-    /*ifstream input;
-    input.open(filePath);
-    if(input.is_open()){
-        FileReading(filePath);
-    }else{
-        cout << "error" << endl;
-    }
-   *//* if(input.is_open()){
-        string m;
-        vector<string> numVec;
-        while(getline(input, m)){
-           numVec.push_back(m);
-        }
-
-    }else{
-        cout << "error" << endl;
-    }*//*
-
-    input.close();
-*/
-    //-------------------шляпа---------------------------
-
+    auto vec = ReadVector("input.txt");
+    std::ofstream out{"output.txt"};
+    out << findMax(vec);
 
     return 0;
 }
