@@ -20,23 +20,28 @@ input.txt
 output.txt
 3*/
 
+/*Вместо вектора сделать матрицу
+найти максимум в каждой строке этой матрицы
+среди максимумов строк матрицы найти минимальное значение*/
+
+
 
 vector<int> ReadVector(const string& filePath){
     std::ifstream input {filePath};
     size_t n;
-    input >> n;
-    vector<int> vec;
-    vec.resize(n);
+    input >> n;             // запись значений в файл input.txt
+    vector<int> vec;        // пустой вектор
+    vec.resize(n);          // емкость вектора увеличивается на колличество значений n
 
     for(int i=0;i<n;++i){
-        input >> vec[i];
+        input >> vec[i];    // запись этих значений в вектор
     }
     return vec;
 }
 
 int findMax(const vector<int>& vec){
-    auto max = vec[0];
-    for(const auto& el : vec){
+    auto max = vec[0];             // принимаем максимальным значением вектора [0] элемент
+    for(const auto& el : vec){     // проходимся по vec
         if(el > max)
             max = el;
     }
