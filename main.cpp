@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 
+using std::ws;
 using std::ifstream;
 using std::ofstream;
 using std::getline;
@@ -27,31 +28,16 @@ output.txt
 
 void FileReading(const string& filePath, vector<int>& vec){
     ifstream input (filePath);
-
-
-    /*vector<string> vec;*/
-    if(input){
+    while(!input.eof()) {
         int n;
-        input >> n;
+        input >> n >> ws;
         vec.push_back(n);
-        /*string line;
-        while(getline(input, line)){
-            vec.push_back(line);
-        }*/
-        for(auto it : vec){
-            cout << it << " ";
-        }
-
-    }else{
-        cout << "error" << endl;
     }
-
     input.close();
 }
 
 void FileWriting(const string& filePath){
     ofstream output(filePath);
-
     if(output){
         cout << "Please, write a numbers below:" << endl;
         int n;
@@ -67,6 +53,12 @@ void FileWriting(const string& filePath){
     output.close();
 }
 
+void VectorPrinting(const vector<int>& vec){
+    for(auto it : vec){
+        cout << it << endl;
+    }
+}
+
 int MaxSort(const vector<int>& vec){
     auto it_max = vec.begin();
     for(auto it = vec.begin(); it != vec.end(); ++it){
@@ -79,14 +71,16 @@ int MaxSort(const vector<int>& vec){
 
 int main(){
 
-    string filePath = "D:/C++/git/grawing_way/input.txt";
+    string filePath = "input.txt";
     vector<int> vec;
     FileWriting(filePath);
     FileReading(filePath, vec);
-    
-    int maxValue = 0;
+    VectorPrinting(vec);
+
+    int m = 0;
     MaxSort(vec);
-    maxValue += MaxSort(vec);
+    m = MaxSort(vec);
+    cout << "max value: " << m << endl;
 
 
 
