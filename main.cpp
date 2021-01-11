@@ -68,12 +68,25 @@ int findMax(const vector<vector<int>>& vec, const string& filePath){
 
     return max_value;
 }
+int VectorMax(const vector<int>& vec){
+    int max = vec[0];
+    for(const auto& it : vec){
+       if(max < it){
+           max = it;
+       }
+    }
+    return max;
+
+}
 
 int main(){
 
     auto vec = ReadVector("input.txt");
     std::ofstream out{"output.txt"};
+    vector<int> vectr = {1, 2, 3, 2, 4, 5, 6, 8, 5};
+    VectorMax(vectr);
     out << findMax(vec, "input.txt");
+
 
     return 0;
 }
