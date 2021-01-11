@@ -31,7 +31,6 @@ vector<int> ReadVector(const string& filePath){
     for(int i=0;i<n;++i){
         input >> vec[i];
     }
-    cout<<vec.size();
     return vec;
 }
 
