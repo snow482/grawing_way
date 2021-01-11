@@ -23,35 +23,57 @@ output.txt
 /*Вместо вектора сделать матрицу
 найти максимум в каждой строке этой матрицы
 среди максимумов строк матрицы найти минимальное значение*/
+// вывод в консоль
 
 
-
-vector<int> ReadVector(const string& filePath){
+vector<vector<int>> ReadVector(const string& filePath){
     std::ifstream input {filePath};
-    size_t n;
-    input >> n;             // запись значений в файл input.txt
-    vector<int> vec;        // пустой вектор
-    vec.resize(n);          // емкость вектора увеличивается на колличество значений n
+    size_t n, m;
+    input >> n;                            // row
+    input >> m;                            // colomn
+    vector<vector<int>> mtrx(n, vector<int>(m));
 
-    for(int i=0;i<n;++i){
-        input >> vec[i];    // запись этих значений в вектор
+    for(int i=0; i<n; ++i){
+        for(int j=0; j<m; ++j)
+        input >> mtrx[i][j];               // запись этих значений в вектор
+
     }
-    return vec;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            cout << mtrx[i][j] << "\t";
+        }
+        cout << endl;
+    }
+
+    return mtrx;
 }
 
-int findMax(const vector<int>& vec){
-    auto max = vec[0];             // принимаем максимальным значением вектора [0] элемент
-    for(const auto& el : vec){     // проходимся по vec
-        if(el > max)
-            max = el;
+int findMax(const vector<vector<int>>& vec, const string& filePath){
+    std::ofstream output{filePath};
+    size_t n, m;
+    output << n;
+    output << m;
+
+    int max_value;
+    int max[n];
+    max[0] = vec[0][0];                   // принимаем максимальным значением матрицы элемент [0][0]
+    for (int i = 0; i < vec.size(); ++i) {
+        for (int j = 0; j < vec.size(); ++j) {
+            if(max[i] < vec[i][j])
+                max[i] = vec[i][j];
+                max_value = max[i];
+        }
+        cout << "max value in rows: " << max[i] << " ";
     }
-    return max;
+
+    return max_value;
 }
 
 int main(){
+
     auto vec = ReadVector("input.txt");
     std::ofstream out{"output.txt"};
-    out << findMax(vec);
+    out << findMax(vec, "input.txt");
 
     return 0;
 }
