@@ -36,7 +36,6 @@ vector<vector<int>> ReadVector(const string& filePath){
     for(int i=0; i<n; ++i){
         for(int j=0; j<m; ++j)
         input >> mtrx[i][j];               // запись этих значений в вектор
-
     }
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
@@ -48,45 +47,44 @@ vector<vector<int>> ReadVector(const string& filePath){
     return mtrx;
 }
 
-int findMax(const vector<vector<int>>& vec, const string& filePath){
-    std::ofstream output{filePath};
-    size_t n, m;
-    output << n;
-    output << m;
-
-    int max_value;
-    int max[n];
-    max[0] = vec[0][0];                   // принимаем максимальным значением матрицы элемент [0][0]
-    for (int i = 0; i < vec.size(); ++i) {
-        for (int j = 0; j < vec.size(); ++j) {
-            if(max[i] < vec[i][j])
-                max[i] = vec[i][j];
-                max_value = max[i];
-        }
-        cout << "max value in rows: " << max[i] << " ";
-    }
-
-    return max_value;
-}
 int VectorMax(const vector<int>& vec){
     int max = vec[0];
     for(const auto& it : vec){
-       if(max < it){
-           max = it;
-       }
+        if(max < it){
+            max = it;
+        }
     }
     return max;
+}
+int VectorMin (const vector<int>& vec){
+    int min = vec[0];
+    for(const auto& it : vec){
+        if(min > it){
+            min = it;
+        }
+    }
+    return min;
+}
+vector<int> FindMaxVecValue(const vector<vector<int>>& vec){
 
+    vector<int> max_value;
+    /*for(const auto& row : vec){
+       max_value.push_back(VectorMax(row));
+    }*/
+    for (int i = 0; i < vec.size(); ++i) {
+       max_value.push_back(VectorMax(vec[i]));
+    }
+    return max_value;
 }
 
 int main(){
 
     auto vec = ReadVector("input.txt");
     std::ofstream out{"output.txt"};
-    vector<int> vectr = {1, 2, 3, 2, 4, 5, 6, 8, 5};
-    VectorMax(vectr);
-    out << findMax(vec, "input.txt");
 
+    vector<int> vectr = FindMaxVecValue(vec);
+    cout << "max value: " << VectorMax(vectr) << endl;
+    cout << "min value: " << VectorMin(vectr) << endl;
 
     return 0;
 }
