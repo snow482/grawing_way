@@ -43,7 +43,6 @@ vector<vector<int>> ReadVector(const string& filePath){
         }
         cout << endl;
     }
-
     return mtrx;
 }
 
@@ -56,6 +55,7 @@ int VectorMax(const vector<int>& vec){
     }
     return max;
 }
+
 int VectorMin (const vector<int>& vec){
     int min = vec[0];
     for(const auto& it : vec){
@@ -65,26 +65,44 @@ int VectorMin (const vector<int>& vec){
     }
     return min;
 }
-vector<int> FindMaxVecValue(const vector<vector<int>>& vec){
 
-    vector<int> max_value;
+std::pair<int,int> FindMaxVecValue(const vector<vector<int>>& vec){
     /*for(const auto& row : vec){
        max_value.push_back(VectorMax(row));
     }*/
+    vector<int> row_vec;
+    int max_value = 0;
+    int min_value = 0;
     for (int i = 0; i < vec.size(); ++i) {
-       max_value.push_back(VectorMax(vec[i]));
+        int max = vec[i][0];
+        for (int j = 0; j < vec.size(); ++j) {
+            if(max < vec[i][j]){
+                max_value = max = vec[i][j];
+            }
+        }
+        row_vec.push_back(i);
     }
-    return max_value;
+    for(const auto& it : row_vec){
+        min_value = row_vec[0];
+        if(min_value > it){
+            min_value = it;
+        }
+    }
+
+    return std::make_pair(max_value, min_value);
 }
 
 int main(){
 
     auto vec = ReadVector("input.txt");
     std::ofstream out{"output.txt"};
+    auto max = FindMaxVecValue(vec);
+    cout << "max value: " << max.first<< endl;
+    cout << "min value: " << max.second<< endl;
 
-    vector<int> vectr = FindMaxVecValue(vec);
+    /*vector<int> vectr = FindMaxVecValue(vec);
     cout << "max value: " << VectorMax(vectr) << endl;
-    cout << "min value: " << VectorMin(vectr) << endl;
+    cout << "min value: " << VectorMin(vectr) << endl;*/
 
     return 0;
 }
