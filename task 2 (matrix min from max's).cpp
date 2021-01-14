@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -9,33 +10,22 @@ using std::cout;
 using std::endl;
 using std::string;
 
-
-/*У тебя есть тестовый файл input.txt в нём записано, n - количество чисел
-А дальше сами числа. Требуется найти максимум и вывести его в файл output.txt
-
-Пример
-input.txt
-3
-1 2 3
-output.txt
-3*/
-
 /*Вместо вектора сделать матрицу
 найти максимум в каждой строке этой матрицы
 среди максимумов строк матрицы найти минимальное значение*/
-// вывод в консоль
+// вывод в консоль минимума
 
 
-vector<vector<int>> ReadVector(const string& filePath){
+vector<vector<int>> ReadVector(const string& filePath) {
     std::ifstream input {filePath};
     size_t n, m;
     input >> n;                            // row
     input >> m;                            // colomn
     vector<vector<int>> mtrx(n, vector<int>(m));
 
-    for(int i=0; i<n; ++i){
+    for(int i=0; i<n; ++i) {
         for(int j=0; j<m; ++j)
-        input >> mtrx[i][j];               // запись этих значений в вектор
+            input >> mtrx[i][j];               // запись этих значений в вектор
     }
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
@@ -46,7 +36,7 @@ vector<vector<int>> ReadVector(const string& filePath){
     return mtrx;
 }
 
-int FindMaxVecValue(const vector<vector<int>>& vec){
+int FindMinFromMaxVecValue(const vector<vector<int>>& vec) {
     int min = INT_MAX;
 
     for (int i = 0; i < vec.size(); ++i) {
@@ -56,11 +46,10 @@ int FindMaxVecValue(const vector<vector<int>>& vec){
                 max = vec[i][j];
             }
         }
-        std::cout << max<<std::endl;
+        std::cout << max <<std::endl;
         if(min > max){
             min = max;
         }
-
     }
     return min;
 }
@@ -68,12 +57,8 @@ int FindMaxVecValue(const vector<vector<int>>& vec){
 int main(){
 
     auto vec = ReadVector("input.txt");
-    auto values = FindMaxVecValue(vec);
+    auto values = FindMinFromMaxVecValue(vec);
     cout << "min value: " << values << endl;
-
-    /*vector<int> vectr = FindMaxVecValue(vec);
-    cout << "max value: " << VectorMax(vectr) << endl;
-    cout << "min value: " << VectorMin(vectr) << endl;*/
 
     return 0;
 }

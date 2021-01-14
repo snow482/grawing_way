@@ -9,7 +9,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-vector<vector<int>> ReadVector(const string& filePath){
+vector<vector<int>> ReadVector(const string& filePath) {
     std::ifstream input {filePath};
     size_t n, m;
     input >> n;                            // row
@@ -29,43 +29,36 @@ vector<vector<int>> ReadVector(const string& filePath){
     return mtrx;
 }
 
-int VectorMax(const vector<int>& vec) {
-    int max = vec[0];
-    for(const auto& it : vec) {
-        if(max < it){
-            max = it;
+vector<vector<int>> TranspositionVector(const vector<vector<int>>& vec_a) {
+    vector<vector<int>> vec_b;
+    vec_b.resize(vec_a.size());
+
+    for (int i = 0; i < vec_b.size(); ++i) {
+        vec_b[i].resize(vec_a[i].size());
+        for (int j = 0; j < vec_b.size(); ++j) {
+            vec_b[j].resize(vec_a[j].size());
+            vec_b[j][i] = vec_a[i][j];
         }
     }
-    return max;
+    return vec_b;
 }
-int VectorMin (const vector<int>& vec) {
-    int min = vec[0];
-    for(const auto& it : vec) {
-        if(min > it){
-            min = it;
-        }
-    }
-    return min;
-}
-vector<int> FindMaxVecValue(const vector<vector<int>>& vec) {
-    /*for(const auto& row : vec) {
-       max_value.push_back(VectorMax(row));
-    }*/
-    vector<int> max_value;
+
+void MatrixPrint(vector<vector<int>> vec) {
     for (int i = 0; i < vec.size(); ++i) {
-        max_value.push_back(VectorMax(vec[i]));
+        for (int j = 0; j < vec.size(); ++j) {
+            cout << vec[i][j] << "\t";
+        }
+        cout << endl;
     }
-    return max_value;
 }
 
 int main(){
 
     auto vec = ReadVector("input.txt");
-    std::ofstream out{"output.txt"};
+    auto transpMatrix = TranspositionVector(vec);
+    cout << endl;
+    MatrixPrint(transpMatrix);
 
-    vector<int> vectr = FindMaxVecValue(vec);
-    cout << "max value: " << VectorMax(vectr) << endl;
-    cout << "min value: " << VectorMin(vectr) << endl;
 
     return 0;
 }
