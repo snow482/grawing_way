@@ -38,12 +38,10 @@ int SideDiagonalSum (const vector<vector<int>> vec) {
 
     for (int i = 0; i < vec.size(); ++i) {
         for (int j = 0; j < vec.size(); ++j) {
-
-            /*if(i+j == vec.size()-1)*/    // v1
+            /*if(i+j == vec.size()-1)*/     // v1
             if(i == vec.size()-1-j) {       // v2
                 sum_value += vec[i][j];
             }
-
         }
     }
 

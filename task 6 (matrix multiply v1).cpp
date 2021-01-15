@@ -33,39 +33,34 @@ void MatrixPrint(vector<vector<int>> vec) {
     }
 }
 
-int FindMaxFromMinValue (const vector<vector<int>> vec) {
-    int max = INT_MIN;
-    int min = INT_MAX;
-    int n = vec.size();
+void VectorPrint(const vector<int>& vec) {
+    for(const auto& it : vec) {
+        cout << "result vector: " << it << " ";
+    }
+}
+vector<int> MultiplyingMtrxByVec (const vector<vector<int>> mtrx_vec, const vector<int>& vec) {
+    vector<int> result_vec(vec.size()); // casting result_vec size to vec.size()
 
-    // --------- цикл бегущий по столбцам -----------
-    /*for (int i = 0; i < vec.size(); ++i) {
-        for (int j = 0; j < vec.size(); ++j) {
-            cout << vec[j][i] << " ";
-        }
-        cout << endl;
-    }*/
-    for (int j = 0; j < n; ++j) {
-        for (int i = n - j - 1; i < n; ++i) {
-            cout << vec[i][j] << " ";
-            if(min > vec[i][j]) {
-                min = vec[i][j];
-            }
-        }
-        if(max < min) {
-            max = min;
+    int n = mtrx_vec.size();
+
+    for (int i = 0; i < n; ++i) {
+        result_vec[i] = 0;
+        for (int j = 0; j < n; ++j) {
+            result_vec[i] += mtrx_vec[i][j] * vec[j];
         }
     }
-    cout << "\n" << "min: " << min <<" max: " << max << endl;
 
-    return max;
+    return result_vec;
 }
 
 int main(){
 
     auto vec = ReadVector("input.txt");
     MatrixPrint(vec);
-    cout << "\n" << FindMaxFromMinValue(vec) << endl;
+    vector<int> vec_for_multiply = {1,2,3};
+
+    vector<int> result_vec = MultiplyingMtrxByVec(vec, vec_for_multiply);
+    VectorPrint(result_vec);
 
     return 0;
 }
