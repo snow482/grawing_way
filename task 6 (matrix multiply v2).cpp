@@ -25,7 +25,22 @@ vector<vector<int>> ReadVector(const string& filePath) {
 }
 
 
-void MatrixPrint(vector<vector<int>>& vec) {
+vector<vector<int>> ReadNewVector(const string& filePath) {
+    std::ifstream input {filePath};
+    size_t n, m;
+    input >> n;                            // row
+    input >> m;                            // colomn
+    vector<vector<int>> mtrx(n, vector<int>(m));
+
+    for(int i=0; i<n; ++i) {
+        for(int j=0; j<m; ++j)
+            input >> mtrx[j][i];               // запись этих значений в вектор
+    }
+
+    return mtrx;
+}
+
+void MatrixPrint(const vector<vector<int>>& vec) {
     for (int i = 0; i < vec.size(); ++i) {
         for (int j = 0; j < vec.size(); ++j) {
             cout << vec[i][j] << "\t";
@@ -33,7 +48,6 @@ void MatrixPrint(vector<vector<int>>& vec) {
         cout << endl;
     }
 }
-
 
 void VectorPrint(const vector<int>& vec) {
     for(const auto& it : vec) {
@@ -74,7 +88,6 @@ vector<int> MultiplyingMtrxByVec (const vector<vector<int>>& mtrx_vec_a,
     for (int i = 6; i < middle_vec.size(); ++i) {
         thirdThreeElements.push_back(middle_vec[i]);
     }
-
     // matrix by vector multiplying start
     for (int i = 0; i < n; ++i) {
         result_vec[i] = 0;
@@ -101,6 +114,16 @@ vector<int> MultiplyingMtrxByVec (const vector<vector<int>>& mtrx_vec_a,
     return result_mtrx;
 }
 
+void WriteOutput (const size_t& n, const size_t m, const vector<int>& vec){
+    std::ofstream output ("output.txt");
+    output << n << endl;
+    output << m << endl;
+    for(const auto& it : vec){
+        output << it << " ";
+    }
+    output.close();
+}
+
 int main(){
 
     auto vec_a = ReadVector("input.txt");
@@ -110,6 +133,10 @@ int main(){
     MatrixPrint(vec_b);
     auto result_mtrx = MultiplyingMtrxByVec(vec_a, vec_b);
     VectorPrint(result_mtrx);
+    WriteOutput(3,3, result_mtrx);
+    cout << "\n";
+    auto new_mtrx = ReadNewVector("output.txt");
+    MatrixPrint(new_mtrx);
 
     return 0;
 }
