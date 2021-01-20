@@ -65,7 +65,7 @@ vector<int> MultiplyingMtrxByVec (const vector<vector<int>>& mtrx_vec_a,
 
     int n = mtrx_vec_a.size();
     int m = mtrx_vec_b.size();
-    int p =
+    int p = mtrx_vec_b.size();
 
     // идея, вытащить из второй матрицы первый столбец и запулить, как вектор
     // и перемножать матрицу на его первых 3 элемента, затем на вторые 3, затем на третьи 3
@@ -90,9 +90,9 @@ vector<int> MultiplyingMtrxByVec (const vector<vector<int>>& mtrx_vec_a,
     }
     // matrix by vector multiplying start
     for (int i = 0; i < n; ++i) {
-        result_vec[i][k] = 0;
         for (int j = 0; j < m; ++j) {
             for (int k = 0; k < p; ++k) {
+                result_vec[i][k] = 0;
                 result_vec[i][k] += mtrx_vec_a[i][j] * firstThreeElements[j][k];
             }
         }

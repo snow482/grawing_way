@@ -9,7 +9,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-// print maxtrix from 1 to 9 like showed below
+// print matrix from 1 to 9 like showed below
 /*
  * 4 2 1
  * 7 5 3
