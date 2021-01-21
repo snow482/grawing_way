@@ -10,15 +10,15 @@ using std::endl;
 using std::string;
 
 // fill a matrix like showed below (function that needs to repeat couple of times)
-/* 8x8 - 0, 6x6 - 1, 4x4 - 2, 2x2 - 3
- * 0 0 0 0 0 0 0 0
- * 0 1 1 1 1 1 1 0
- * 0 1 2 2 2 2 1 0
- * 0 1 2 3 3 2 1 0
- * 0 1 2 3 3 2 1 0
- * 0 1 2 2 2 2 1 0
- * 0 1 1 1 1 1 1 0
- * 0 0 0 0 0 0 0 0
+/* 8x8 - 4, 6x6 - 3, 4x4 - 2, 2x2 - 1
+ * 4 4 4 4 4 4 4 4
+ * 4 3 3 3 3 3 3 4
+ * 4 3 2 2 2 2 3 4
+ * 4 3 2 1 1 2 3 4
+ * 4 3 2 1 1 2 3 4
+ * 4 3 2 2 2 2 3 4
+ * 4 3 3 3 3 3 3 4
+ * 4 4 4 4 4 4 4 4
 */
 
 // выделить память заранее и перезаписывать значения
@@ -35,19 +35,10 @@ vector<vector<int>> ReadVector(const string& filePath) {
         for(int j=0; j<m; ++j)
             input >> mtrx[i][j];               // запись этих значений в вектор
     }
-
     return mtrx;
 }
-void VecWrite(const size_t& n, const size_t& m, const vector<int>& vec){
-    std::ofstream output {"output_4.1.txt"};
-    output << n << endl;
-    output << m << endl;
-    for(const auto& it : vec)
-        output << it << " ";
 
-    output.close();
-}
-void MatrixPrintHorizontal(vector<vector<int>>& vec) {
+void MatrixPrint(vector<vector<int>>& vec) {
     for (int i = 0; i < vec.size(); ++i) {
         for (int j = 0; j < vec.size(); ++j) {
             cout << vec[i][j] << "\t";
@@ -55,42 +46,61 @@ void MatrixPrintHorizontal(vector<vector<int>>& vec) {
         cout << endl;
     }
 }
-void VectorPrint(const vector<int>& vec) {
-    for(const auto& it : vec) {
-        cout << it << " ";
-    }
-}
-vector<int> NewMtrxPrintingWay_h (const vector<vector<int>>& vec) {
-    vector<int> result;
-    int n = vec.size();
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if(i == 0 && j <= n-1)
-                result.push_back({0});
-            if(i == 1 && j < 1)
-                result.push_back({0});
-            if(i == 1 && j <= n-1-i-1)
-                result.push_back({1});
+void Function_1 (const int32_t& n, const int32_t& m, vector<vector<int>>& vec,
+                 int fillValue, int otstup) {
 
+    if(otstup == 0) {
+        for (int i = 0; i < m; ++i) {
+            vec[n-5-otstup][i] = fillValue; //first
+            vec[n-4-otstup][i] = fillValue; //last
         }
+        for (int i = 0; i < n; ++i) {
+            vec[i][m-5-otstup] = fillValue; //left
+            vec[i][m-4-otstup] = fillValue; //right
+        }
+    }if (otstup == 1) {
+        for (int i = 0; i < m; ++i) {
+            vec[n-5-otstup][i] = fillValue; //first
+            vec[n-2-otstup][i] = fillValue; //last
+        }
+        for (int i = 0; i < n; ++i) {
+            vec[i][m-5-otstup] = fillValue; //left
+            vec[i][m-2-otstup] = fillValue; //right
+        }
+    }if (otstup == 2) {
+        for (int i = 0; i < m; ++i) {
+            vec[n-5-otstup][i] = fillValue; //first
+            vec[n-otstup][i] = fillValue;   //last
+        }
+        for (int i = 0; i < n; ++i) {
+            vec[i][m-5-otstup] = fillValue; //left
+            vec[i][m-otstup] = fillValue;   //right
+        }
+    }if (otstup == 3) {
+        for (int i = 0; i < m; ++i) {
+            vec[n-otstup-5][i] = fillValue; //first
+            vec[n-otstup+2][i] = fillValue; //last
+        }
+        for (int i = 0; i < n; ++i) {
+            vec[i][m-otstup-5] = fillValue; //left
+            vec[i][m-otstup+2] = fillValue; //right
+        }
+
     }
-    cout << "\n";
-    return result;
 }
 
 int main() {
 
     auto vec = ReadVector("input_4.1.txt");
-    MatrixPrintHorizontal(vec);
+    MatrixPrint(vec);
 
-    auto vec_h = NewMtrxPrintingWay_h(vec);
-    VectorPrint(vec_h);
+    Function_1(8,8,vec, 1, 0);
+    Function_1(8,8,vec, 2, 1);
+    Function_1(8,8,vec, 3, 2);
+    Function_1(8,8,vec, 4, 3);
     cout << "\n";
-    VecWrite(8, 8, vec_h);
-
-    auto new_mtrx = ReadVector("output_4.1.txt");
-    MatrixPrintHorizontal(new_mtrx);
+    MatrixPrint(vec);
 
     return 0;
 }
