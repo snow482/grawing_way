@@ -9,7 +9,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-// fill a matrix like showed below (function that needs to repeat couple of times)
+// fill a matrix like showed below (function that needs to repeat a couple of times)
 /* 8x8 - 4, 6x6 - 3, 4x4 - 2, 2x2 - 1
  * 4 4 4 4 4 4 4 4
  * 4 3 3 3 3 3 3 4
