@@ -43,26 +43,30 @@ vector<vector<char>> ReadVector(const string& filePath) {
 
 void MatrixPrint(vector<vector<char>>& vec) {
     for (int i = 0; i < vec.size(); ++i) {
-        for (int j = 0; j < vec.size(); ++j) {
+        for (int j = 0; j < vec[i].size(); ++j) { // вектор<векторов>, вывод по колличеству столбцов, а не строк (не квадратная матрица)
             cout << vec[i][j] << "\t";
         }
         cout << endl;
     }
 }
 
-void MatrixChanging (const size_t& n, const size_t& m, vector<vector<char>>& mtrx){
+void MatrixChanging (const char16_t& n, const char16_t& m, vector<vector<char>>& mtrx){
 
+    //TODO - to complete
     int len = mtrx.size();
     for (int i = 0; i < len; ++i) {
-        for(int j = 0; j < len; ++j){
+        for(int j = 0; j < mtrx[i].size(); ++j){
             if(mtrx[i][j] == '#'){
-                mtrx[i][j] = -1;
+                mtrx[i][j] = 0x32;
             }
             if(mtrx[i][j] == '.'){
-                mtrx[i][j] = 0;
+                mtrx[i][j] = 0x30;
             }
             if(mtrx[i][j] == 'S'){
-                mtrx[i][j] = 1;
+                mtrx[i][j] = 0x31;
+            }
+            if(mtrx[i][j] == 'F'){
+                mtrx[i][j] = 0x30;
             }
         }
     }
@@ -70,9 +74,12 @@ void MatrixChanging (const size_t& n, const size_t& m, vector<vector<char>>& mtr
 
 int main() {
 
+
     auto vec = ReadVector("input_11.txt");
     MatrixPrint(vec);
-
+    cout << "\n";
+    MatrixChanging(5, 6, vec);
+    MatrixPrint(vec);
 
     return 0;
 }
