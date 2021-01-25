@@ -4,5 +4,5 @@ project(grawing_way)
 set(CMAKE_CXX_STANDARD 17)
 
 
-add_executable(grawing_way "task 8 (min from maxes ).cpp")
+add_executable(grawing_way "task 11 (labirint).cpp")
 
