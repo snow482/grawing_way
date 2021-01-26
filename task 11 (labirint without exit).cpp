@@ -14,9 +14,9 @@ using std::string;
 /*  5 x 6   transform to->      7 x 8 (-1 on sides)
                         * -1 -1 -1 -1 -1 -1 -1 -1
   # . . # S .           * -1 -1  0  0 -1  1  0 -1
-  F # . . . .           * -1  0 -1  0  0  0  0 -1
+  F # . # . .           * -1  0 -1  0 -1  0  0 -1
   . # . # # .           * -1  0 -1  0 -1 -1  0 -1
-  . . . . . .           * -1  0  0  0  0  0  0 -1
+  . . . # . .           * -1  0  0  0 -1  0  0 -1
   # # # # . .           * -1 -1 -1 -1 -1  0  0 -1
                         * -1 -1 -1 -1 -1 -1 -1 -1
 */
@@ -34,7 +34,6 @@ vector<vector<int>> ReadVector(const string& filePath) {
     input >> n >> m;                            // row colomn
     vector<vector<int>> mtrx(n+2, vector<int>(m+2, 0));
 
-    // frame filling
     int fillVallue = -1;
     for(int i = 0; i < m+2; ++i){
         mtrx[0][i] = fillVallue; // first
@@ -45,7 +44,6 @@ vector<vector<int>> ReadVector(const string& filePath) {
         mtrx[i][m+1] = fillVallue; // right
     }
 
-    // find the desired symbols and changing
     char symbol;
     for(int i = 1; i < n+1; ++i) {
         for(int j = 1; j < m+1; ++j) {
@@ -71,7 +69,6 @@ vector<vector<int>> ReadVector(const string& filePath) {
     }
     return mtrx;
 }
-
 
 void FindingRightWay(const int& nForFind,
                      const int& mForFind,
