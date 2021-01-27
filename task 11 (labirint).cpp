@@ -72,7 +72,6 @@ vector<vector<int>> ReadVector(const string& filePath) {
     return mtrx;
 }
 
-
 void FindingRightWay(const int& nForFind,
                      const int& mForFind,
                      vector<vector<int>>& mtrx){

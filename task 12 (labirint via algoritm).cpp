@@ -14,19 +14,16 @@ using std::string;
 /*  5 x 6   transform to->      7 x 8 (-1 on sides)
                         * -1 -1 -1 -1 -1 -1 -1 -1
   # . . # S .           * -1 -1  0  0 -1  1  0 -1
-  F # . # . .           * -1  0 -1  0 -1  0  0 -1
+  F # . . . .           * -1  0 -1  0  0  0  0 -1
   . # . # # .           * -1  0 -1  0 -1 -1  0 -1
-  . . . # . .           * -1  0  0  0 -1  0  0 -1
+  . . . . . .           * -1  0  0  0  0  0  0 -1
   # # # # . .           * -1 -1 -1 -1 -1  0  0 -1
                         * -1 -1 -1 -1 -1 -1 -1 -1
 */
-// 1) сделать из левой матрицы правую
-// 2) пройти все элементы и найти "1". Затем все "0" в радиусе "1" заменить на "2",
-// затем все "0" в радиусе "2" заменить на "3" и тд, так до того момента пока не кончатся нули.
-// Наибольшее значение и будет выходом (F), вывести его координаты в данной матрице (ответ - (2,1))
-// выделить память заранее и перезаписывать значения (скорее всего надо)
-//
-
+// Имеются координаты точки начала, есть координаты точки выхода, найти путь выхода из лабиринта,
+// не используя двойной цикл пробега по матрице, а найдя 1, двигаться уже от нее глядя по сторонам
+// (надо использовать std::queue, записывать туда координаты значений по сторонам и затем менять их,
+// таким образом будет набор значений: 1 2 2 2 2 3 3 3 4 4 4 5 5 5 6 6 7 8 8 8 9 9 10)
 
 vector<vector<int>> ReadVector(const string& filePath) {
     std::ifstream input {filePath};
@@ -34,6 +31,7 @@ vector<vector<int>> ReadVector(const string& filePath) {
     input >> n >> m;                            // row colomn
     vector<vector<int>> mtrx(n+2, vector<int>(m+2, 0));
 
+    // frame filling
     int fillVallue = -1;
     for(int i = 0; i < m+2; ++i){
         mtrx[0][i] = fillVallue; // first
@@ -44,6 +42,7 @@ vector<vector<int>> ReadVector(const string& filePath) {
         mtrx[i][m+1] = fillVallue; // right
     }
 
+    // find the desired symbols and changing
     char symbol;
     for(int i = 1; i < n+1; ++i) {
         for(int j = 1; j < m+1; ++j) {
@@ -75,35 +74,26 @@ void FindingRightWay(const int& nForFind,
                      vector<vector<int>>& mtrx){
     int k = 1;
     while(mtrx[nForFind][mForFind] == 0) {
-        bool exitExist = true;
         for (int i = 0; i < mtrx.size(); ++i) {
             for (int j = 0; j < mtrx[i].size(); ++j) {
                 if (mtrx[i][j] == k) {
-                    int num = k + 1;
-                    if (mtrx[i][j - 1] == 0) {
-                        mtrx[i][j - 1] = num;
-                        exitExist = false;
+                    int num = k+1;
+                    if(mtrx[i][j-1] == 0) {
+                        mtrx[i][j-1] = num;
                     }
-                    if (mtrx[i][j + 1] == 0) {
-                        mtrx[i][j + 1] = num;
-                        exitExist = false;
+                    if(mtrx[i][j+1] == 0) {
+                        mtrx[i][j+1] = num;
                     }
-                    if (mtrx[i - 1][j] == 0) {
-                        mtrx[i - 1][j] = num;
-                        exitExist = false;
+                    if(mtrx[i-1][j] == 0){
+                        mtrx[i-1][j] = num;
                     }
-                    if (mtrx[i + 1][j] == 0) {
-                        mtrx[i + 1][j] = num;
-                        exitExist = false;
+                    if(mtrx[i+1][j] == 0){
+                        mtrx[i+1][j] = num;
                     }
                 }
             }
-            ++k;
         }
-        if (exitExist) {
-            cout << "no exit" << endl;
-            break;
-        }
+        ++k;
     }
 }
 
@@ -120,7 +110,7 @@ void MatrixPrint(vector<vector<int>>& vec) {
 
 int main() {
 
-    auto vec = ReadVector("input_11_without_exit.txt");
+    auto vec = ReadVector("input_11.txt");
 
     MatrixPrint(vec);
     cout << "\n";
