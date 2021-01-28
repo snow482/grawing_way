@@ -2,12 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
-
-using std::vector;
-using std::cin;
-using std::cout;
-using std::endl;
-using std::string;
+#include <queue>
 
 // fill a matrix like showed below (function that needs to repeat couple of times)
 // # - стены, . - пустота, F - выход, S - старт
@@ -24,12 +19,13 @@ using std::string;
 // не используя двойной цикл пробега по матрице, а найдя 1, двигаться уже от нее глядя по сторонам
 // (надо использовать std::queue, записывать туда координаты значений по сторонам и затем менять их,
 // таким образом будет набор значений: 1 2 2 2 2 3 3 3 4 4 4 5 5 5 6 6 7 8 8 8 9 9 10)
+// Двигаться до тех пор пока очередь не будет пуста или не будет найден искомый финишный элемент.
 
-vector<vector<int>> ReadVector(const string& filePath) {
+std::vector<std::vector<int>> ReadVector(const std::string& filePath) {
     std::ifstream input {filePath};
     size_t n, m;
     input >> n >> m;                            // row colomn
-    vector<vector<int>> mtrx(n+2, vector<int>(m+2, 0));
+    std::vector<std::vector<int>> mtrx(n+2, std::vector<int>(m+2, 0));
 
     // frame filling
     int fillVallue = -1;
@@ -61,7 +57,7 @@ vector<vector<int>> ReadVector(const string& filePath) {
                     mtrx[i][j] = 0;
                     break;
                 default:
-                    cout << "error" << endl;
+                    std::cout << "error" << std::endl;
                     break;
             }
         }
@@ -71,40 +67,60 @@ vector<vector<int>> ReadVector(const string& filePath) {
 
 void FindingRightWay(const int& nForFind,
                      const int& mForFind,
-                     vector<vector<int>>& mtrx){
+                     std::vector<std::vector<int>>& mtrx){
+    std::queue<std::pair<int,int>> queueList;
+
+    for(int i = 0; i < mtrx.size(); ++i) {
+        for(int j = 0; j < mtrx[i].size(); ++j) {
+            if(mtrx[i][j] == 1){
+                queueList.push(std::pair(i, j));
+            }
+        }
+    }
     int k = 1;
-    while(mtrx[nForFind][mForFind] == 0) {
-        for (int i = 0; i < mtrx.size(); ++i) {
-            for (int j = 0; j < mtrx[i].size(); ++j) {
-                if (mtrx[i][j] == k) {
-                    int num = k+1;
-                    if(mtrx[i][j-1] == 0) {
-                        mtrx[i][j-1] = num;
+    while (mtrx[nForFind][mForFind] == 0){
+        for(int i = 0; i < mtrx.size(); ++i){
+
+            if(!queueList.empty()) {
+                if (mtrx[queueList.front().first][queueList.front().second] == k){
+                    int num = k + 1;
+                    if(mtrx[queueList.front().first][queueList.front().second - 1] == 0){
+                        mtrx[queueList.front().first][queueList.front().second - 1] = num;
+                        queueList.push(std::pair(queueList.front().first,queueList.front().second - 1));
                     }
-                    if(mtrx[i][j+1] == 0) {
-                        mtrx[i][j+1] = num;
+                    if(mtrx[queueList.front().first][queueList.front().second + 1] == 0){
+                        mtrx[queueList.front().first][queueList.front().second + 1] = num;
+                        queueList.push(std::pair(queueList.front().first,queueList.front().second + 1));
                     }
-                    if(mtrx[i-1][j] == 0){
-                        mtrx[i-1][j] = num;
+                    if(mtrx[queueList.front().first - 1][queueList.front().second] == 0){
+                        mtrx[queueList.front().first - 1][queueList.front().second] = num;
+                        queueList.push(std::pair(queueList.front().first - 1, queueList.front().second));
                     }
-                    if(mtrx[i+1][j] == 0){
-                        mtrx[i+1][j] = num;
+                    if(mtrx[queueList.front().first + 1][queueList.front().second] == 0){
+                        mtrx[queueList.front().first + 1][queueList.front().second] = num;
+                        queueList.push(std::pair(queueList.front().first + 1, queueList.front().second));
                     }
                 }
             }
+
         }
+        queueList.pop();
+
         ++k;
+
     }
+
+    std::cout << queueList.front().first << ", "<< queueList.front().second << std::endl;
 }
 
-void MatrixPrint(vector<vector<int>>& vec) {
+void MatrixPrint(std::vector<std::vector<int>>& vec) {
     for (int i = 0; i < vec.size(); ++i) {
         // вектор<векторов>, вывод по кол-ву столбцов, а не строк
         // (не квадратная матрица) n < m
         for (int j = 0; j < vec[i].size(); ++j) {
-            cout << vec[i][j] << "\t";
+            std::cout << vec[i][j] << "\t";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 }
 
@@ -113,7 +129,7 @@ int main() {
     auto vec = ReadVector("input_11.txt");
 
     MatrixPrint(vec);
-    cout << "\n";
+    std::cout << "\n";
     FindingRightWay(2, 1, vec);
     MatrixPrint(vec);
 

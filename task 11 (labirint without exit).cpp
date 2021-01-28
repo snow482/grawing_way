@@ -82,24 +82,21 @@ void FindingRightWay(const int& nForFind,
                     int num = k + 1;
                     if (mtrx[i][j - 1] == 0) {
                         mtrx[i][j - 1] = num;
-                        exitExist = false;
                     }
                     if (mtrx[i][j + 1] == 0) {
                         mtrx[i][j + 1] = num;
-                        exitExist = false;
                     }
                     if (mtrx[i - 1][j] == 0) {
                         mtrx[i - 1][j] = num;
-                        exitExist = false;
                     }
                     if (mtrx[i + 1][j] == 0) {
                         mtrx[i + 1][j] = num;
-                        exitExist = false;
                     }
+                    exitExist = false;
                 }
             }
-            ++k;
         }
+        ++k;
         if (exitExist) {
             cout << "no exit" << endl;
             break;
