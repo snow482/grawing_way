@@ -5,6 +5,25 @@
 #include <string>
 #include <ctime>
 
+/*
+ * Вначале бойцы находятся на расстоянии 100фт.
+ * All characters has a running speed.
+ * Needs to do an iniciative check for identify (random throw) from each character.
+ * After
+ *
+ *
+ *
+ *
+ */
+
+// v1.0
+/*template<typename T>
+T DiceRole (T tMin, T tMax)
+{
+    return rand() % (tMax - tMin) +tMax;
+}*/
+
+// v2.0
 template<int min, int max>
 struct Dice {
     int Roll() const {
@@ -21,17 +40,37 @@ using d8 = Dice<1,8>;
 using d10 = Dice<1,10>;
 using d12 = Dice<1,12>;
 
-int Iniciative(){
-    return d20{}.Roll();
-}
+
+
+enum struct WeaponType {
+    //------Santa------
+    SantaBag,
+    Icicle,   //сосулька
+    Sleigh,   //сани
+    //------Ranger------
+    Sword,
+    LongBow,
+    Spell
+
+};
+
+/*int RandomThrow (int diceMin, int diceMax) {
+    // d20 dice from 1 to 20, where 20 critical hit / 1 critical failure
+    // d4 - d12 for weapon damage rate
+    int throwValue = 0;
+    srand(time(0));
+    throwValue = diceMin + rand() % diceMax;
+    return throwValue;
+}*/
 
 
 class Character {
 public:
     Character(std::string& name, int hp, int armorClass, int weaponType, int weaponHp, int runRange)
-    : m_name(name), m_hp(hp), m_armorClass(armorClass), m_weaponType(weaponType), m_weaponHP(weaponHp), m_runRange(runRange)
+            : m_name(name), m_hp(hp), m_armorClass(armorClass), m_weaponType(weaponType), m_weaponHP(weaponHp), m_runRange(runRange)
     {}
 
+    virtual int Initiative() = 0;
     virtual void run()
     {
         std::cout << "run" << std::endl;
@@ -46,22 +85,7 @@ public:
 
     virtual void setHP(int attackThrow, int attackNum) {
         if (attackThrow > m_armorClass) {
-            if(attackNum == 1) {
-                m_hp -= firstAttack();
-                m_weaponHP -= 5;
-                std::cout << "weapon HP: " << m_weaponHP << std::endl;
-            }
-            if(attackNum == 2) {
-                m_hp -= secondAttack();
-                m_weaponHP -= 5;
-                std::cout << "weapon HP: " << m_weaponHP << std::endl;
-            }
-            if(attackNum == 3){
-                //надо сделать механизм выбора уклонения от атаки (от номера атаки противника)
-                //ввести номер соперника и не получаешь урон
-                //в ответ legendaryAttack() и восстанавливает weaponHp до фула
-            }
-
+            m_hp -= damageThrow;
             std::cout << "hp: " << m_hp << std::endl;
         }
         else {
@@ -73,41 +97,45 @@ public:
         Character::setHP(attackThrow, attackNum);
     }
 
+    // может быть лучше map сделать, типа выбрать тип оружия, 1 - sword или "sword" - sword
 
+    /*virtual int damageThrow(WeaponType) {
+        int damage = 0;
+        if (m_weaponType == static_cast<int>(WeaponType::Icicle)) {
+            damage = d6{}.Roll();
+        }
+        if (m_weaponType == static_cast<int>(WeaponType::SantaBag)) {
+            damage = d8{}.Roll();
+        }
+        if (m_weaponType == static_cast<int>(WeaponType::Sleigh)) {
+            damage = d10{}.Roll() + d10{}.Roll();
+        }
+        if (m_weaponType == static_cast<int>(WeaponType::Sword)) {
+            damage = d8{}.Roll();
+        }
+        if (m_weaponType == static_cast<int>(WeaponType::LongBow)) {
+            damage = d8{}.Roll();
+        }
+        if (m_weaponType == static_cast<int>(WeaponType::Spell)) {
+            damage = d12{}.Roll() + d12{}.Roll();
+        }
+        return damage;
+    }*/
     virtual int firstAttack() = 0;
     virtual int secondAttack() = 0;
-    virtual double damageBlock(int skill_Or_Item) {
-
+    virtual int bonusAttack() = 0;
+    virtual double damageBlock(int shield) {
+        int value = 0;
+        return value;
     };
     virtual int legendaryAttack() = 0;
 
 
 
-
 private:
+
     std::string m_name;
     int m_hp, m_armorClass, m_weaponType, m_weaponHP, m_runRange;
-
-private:
-    /*
-     * как реализовать правильно баф на защиту (ведь у меня нет такого показателя, как атака),
-     * мб засунуть значения бафа в параметры - m_buff = 0; если апался, то ++m_buff
-     *
-     * т.е. надо броски атак - % бафа (который стакается)
-     * сделать флаг, сколько раз он юзался, если
-     * 1 - (-25% дамага) / (+25% к атаке)
-     * 2 - (-50% дамага) / (+50% к атаке)
-     * 3 - (-75% дамага) / (+75% к атаке)
-     */
-    int buff(int defence_or_attack) {
-        if(defence_or_attack == 1) {
-
-        }
-        if(defence_or_attack == 2) {
-
-        }
-    }
-
 };
 
 class Ranger : public Character {
@@ -115,38 +143,34 @@ public:
     explicit Ranger(std::string name = "Ranger_x_Ubiwator123_x",
                     int hp = 44,
                     int armorClass = 13,
-
+                    int weaponType = 0,
                     int weaponHp = 20,
                     int runRange = 35,
-                    int shieldType = 0,
                     int bow = 2)
-    : Character(name, hp, armorClass, shieldType, weaponHp,  runRange), m_longBow(bow)
+            : Character(name, hp, armorClass, weaponType, weaponHp,  runRange), m_longBow(bow)
     {}
 
-    double damageBlock(int shield) override {
-
-    }
-
-    //first attack (sword attack)
+    //Sword attack
     int firstAttack() override {
-        return d6{}.Roll();
+        int damage = 0;
+        if (static_cast<int>(WeaponType::Sword)) {
+            damage = d8{}.Roll();
+        }
     }
 
-    //second attack (bow attack)
-    int secondAttack() override {
-        return d10{}.Roll() * m_longBow;
-    }
+    //Bow Attack
 
-    //legendary attack (fire arrow)
-    int legendaryAttack() override {
-        return d10{}.Roll() + d10{}.Roll();
-    }
 
-    //setHp
+    //Spell Attack
+
+
+
+
     void setHP(int attackThrow, int damageThrow) override {
         damageThrow += m_longBow;
         Character::setHP(attackThrow, damageThrow);
     }
+
 private:
     int m_longBow;
 
@@ -174,7 +198,7 @@ private:
 
 
 Character* Turn (int v){
-    if(v == 1) {
+    if(v == 1){
         return new Ranger{};
     }
     /*else {
@@ -189,15 +213,12 @@ int main() {
     int heroVariant;
     std::cin >> heroVariant;
 
-    /*Character* ch =*/
+    Character* ch =
 
 
-    std::cout << " " << std::endl;
+            std::cout << " " << std::endl;
 
 
     return 0;
 }
-
-
-
 
