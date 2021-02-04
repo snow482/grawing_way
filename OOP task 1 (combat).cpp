@@ -21,30 +21,42 @@ using d8 = Dice<1,8>;
 using d10 = Dice<1,10>;
 using d12 = Dice<1,12>;
 
-int Iniciative(){
+int Iniciative() {
     return d20{}.Roll();
 }
+
+class Weapon {
+public:
+    Weapon(int weaponType, int weaponHp)
+    : m_weaponType(weaponType), m_weaponHp(weaponHp)
+    {}
+
+private:
+    int m_weaponType, m_weaponHp;
+};
 
 
 class Character {
 public:
-    Character(std::string& name, int hp, int armorClass, int weaponType, int weaponHp, int runRange)
-    : m_name(name), m_hp(hp), m_armorClass(armorClass), m_weaponType(weaponType), m_weaponHP(weaponHp), m_runRange(runRange)
+    Character(std::string& name, int hp, int armorClass, int runRange)
+    :   m_name(name),
+        m_hp(hp),
+        m_armorClass(armorClass),
+        m_runRange(runRange)
     {}
 
-    virtual void run()
-    {
+    virtual void run() {
         std::cout << "run" << std::endl;
     }
 
-    virtual int attackThrow(){
+    virtual int attackThrow() {
         int throwValue = 0;
         throwValue = d20{}.Roll();
         std::cout << throwValue << std::endl;
         return throwValue;
     };
 
-    virtual void setHP(int attackThrow, int attackNum) {
+    void setHP(int attackThrow, int attackNum) {
         if (attackThrow > m_armorClass) {
             if(attackNum == 1) {
                 m_hp -= firstAttack();
@@ -56,7 +68,7 @@ public:
                 m_weaponHP -= 5;
                 std::cout << "weapon HP: " << m_weaponHP << std::endl;
             }
-            if(attackNum == 3){
+            if(attackNum == 3) {
                 //надо сделать механизм выбора уклонения от атаки (от номера атаки противника)
                 //ввести номер соперника и не получаешь урон
                 //в ответ legendaryAttack() и восстанавливает weaponHp до фула
@@ -67,7 +79,7 @@ public:
         else {
             std::cout << "missing attack" << std::endl;
         }
-        if (m_hp <= 0) {
+        if(m_hp <= 0) {
             std::cout << "DeathMorozzz is dead"<< std::endl;
         }
         Character::setHP(attackThrow, attackNum);
@@ -86,15 +98,13 @@ public:
 
 private:
     std::string m_name;
-    int m_hp, m_armorClass, m_weaponType, m_weaponHP, m_runRange;
+    int m_hp, m_armorClass,  m_runRange;
 
 private:
     /*
      * как реализовать правильно баф на защиту (ведь у меня нет такого показателя, как атака),
      * мб засунуть значения бафа в параметры - m_buff = 0; если апался, то ++m_buff
-     *
-     * т.е. надо броски атак - % бафа (который стакается)
-     * сделать флаг, сколько раз он юзался, если
+     * т.е. надо броски атак - % бафа (который стакается) сделать флаг, сколько раз он юзался, если
      * 1 - (-25% дамага) / (+25% к атаке)
      * 2 - (-50% дамага) / (+50% к атаке)
      * 3 - (-75% дамага) / (+75% к атаке)
@@ -173,7 +183,7 @@ private:
 };*/
 
 
-Character* Turn (int v){
+Character* Turn (int v) {
     if(v == 1) {
         return new Ranger{};
     }
@@ -188,6 +198,7 @@ int main() {
                  "number 1 - The_DeathMorozzz, 2 - Ranger_x_Ubiwator123_x" << std::endl;
     int heroVariant;
     std::cin >> heroVariant;
+
 
     /*Character* ch =*/
 
